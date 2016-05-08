@@ -1,0 +1,11 @@
+{
+  "id": "config",
+  "access_key_id": "dummy access key",
+  "secret_access_key": "dummy secret access key",
+  "key_pair": "dummy key name",
+  "security_group": "dummy security group",
+  "learn_bioc_password": "dummy learn bioc password",
+  "use_bioc_password": "dummy use bioc password",
+  "secret_token": "dummy secret token",
+  "secret_key_base": "dummy secret key base"
+}

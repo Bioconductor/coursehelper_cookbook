@@ -1,0 +1,9 @@
+{
+  "id": "gd_bundle-g2-g1.crt",
+  "value": {
+    "encrypted_data": "sNn6pJog7q/ITZNLlFYfrtEhNiEbI5xVqMNr03X8M6ADLUkyyBiV9EWk2mxW\nCsrBRsbCXw2JMYeRCc4H2UDHTA==\n",
+    "iv": "P9c+wWRA4WGsmu4Ui6Ufyg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

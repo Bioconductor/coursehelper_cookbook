@@ -1,0 +1,9 @@
+{
+  "id": "IssueTrackerConfig",
+  "value": {
+    "encrypted_data": "2YdEplrrESjb++2BMzxerQCsol61QVAOKqxawN8qrt758BRi/N5Lm5M5DEOi\nEj3u6yZQ/O5/CDPPEfrfzCxDeHo8WgYrtrJUVZw93EB2/GVzdeUYcqQaDldh\nvPfNh065sQqGtz1mdc7aMmrhl3tc03/Oz6uC8wi5RiYVNONCetcokZ93pZRk\nahzU9KI5WVc82QXZ5Z1i8Eg7exkPcUYqarw8J4AOrMWNiz73CzAeDWxEFYGS\ncCp6RDz5szfn2qMgZXnMFlk3lQwvB7QvV2353hPl12AlInqnqki5lxAzygSe\n0Kto3doULEHNYb2uyAt+Zn3KROr68UncxK1xTwnf0BT55KlhyNh/8meY2R0Q\nJ/l8lzO8CY8d3eFKIuOEmdN6cWDv8odr6Yacj26H9Sc4Rg==\n",
+    "iv": "xjAxpVkPG5QuxCkQwMe1xQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
+}

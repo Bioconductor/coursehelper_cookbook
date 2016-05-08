@@ -1,0 +1,24 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  data_bags_path: ./test/data_bags
+  encrypted_data_bag_secret_key_path: ./secret_for_testing_only
+
+# Uncomment the following verifier to leverage Inspec instead of Busser (the
+# default verifier)
+# verifier:
+#   name: inspec
+
+platforms:
+  - name: ubuntu-14.04
+    # driver_config:
+    #   ssh_key: "/Users/dtenenba/.ssh/id_rsa"
+
+suites:
+  - name: default
+    run_list:
+      - recipe[issue_tracker_github_cookbook::default]
+    attributes:
