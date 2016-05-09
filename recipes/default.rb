@@ -284,6 +284,23 @@ execute "run app migration" do
   user user
 end
 
+echo "set up rbenv for www-data part 1" do
+  command %Q(echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc)
+  cwd "/var/www"
+  user user
+  not_if {File.exists? "/var/www/.bashrc"}
+end
+
+echo "set up rbenv for www-data part 1" do
+  command %Q(echo 'eval "$(rbenv init -)"' >> ~/.bashrc)
+  cwd "/var/www"
+  user user
+  not_if %Q(grep -q 'rbenv init' /var/www/.bashrc)
+end
+
+# TODO - add pub keys to ~ubuntu/.ssh/authorized_keys (and ~www-data as well)
+
+
 
 
 # FIXME probably need a way to guard against unwanted service
