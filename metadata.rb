@@ -4,7 +4,7 @@ maintainer_email 'dtenenba@fredhutch.org'
 license 'Artistic 2.0'
 description 'Installs/Configures coursehelper'
 long_description 'Installs/Configures coursehelper'
-version '0.1.7'
+version '0.1.8'
 
 depends 'passenger_apache2', '~> 2.3.0'
 depends 'apt', '~> 2.9.2'
