@@ -1,11 +1,51 @@
 {
   "id": "config",
-  "access_key_id": "dummy access key",
-  "secret_access_key": "dummy secret access key",
-  "key_pair": "dummy key name",
-  "security_group": "dummy security group",
-  "learn_bioc_password": "dummy learn bioc password",
-  "use_bioc_password": "dummy use bioc password",
-  "secret_token": "dummy secret token",
-  "secret_key_base": "dummy secret key base"
+  "access_key_id": {
+    "encrypted_data": "QTMp6rsXBJBkmdH95hD4N3HOnMxyhpAIFene+3MA84iBb2NVQEifb8r3c55B\n0Bzd\n",
+    "iv": "TJ6ngqtZ8Wy9+ZCHAmMP0Q==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "secret_access_key": {
+    "encrypted_data": "crMjzCJ7IaKA44GDlOjOVQBdx5Sx7zpbQvvrdLmumIfGWPilY3zws1GqQP+l\nqOLQ\n",
+    "iv": "lursOAGQV1HXn7l+/HHV5Q==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "key_pair": {
+    "encrypted_data": "O6+YxZFIQTJ1xLPFNikyFd2gaV+i+KEMMR9Q1uHOXUfelgWnCxVDdL4qtgWJ\nUNNg\n",
+    "iv": "+ebAGwCVyoCXlDPNkgxjGg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "security_group": {
+    "encrypted_data": "pzdJh/voM2xMpuObybGQ4sovB1nsIcJkHQGg6TQ3/S1b9rxF27YLuks8XzB7\nz0tB\n",
+    "iv": "eJycbz/8yqxWKa5GIFwoXQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "learn_bioc_password": {
+    "encrypted_data": "pTse631mcjjYWT+VA2VRghluk8WaZWT5kyFaH14UDneRUmtvkwSynwAFkuH+\ns54M\n",
+    "iv": "Wspljpwn1NKywOpAi5i8iA==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "use_bioc_password": {
+    "encrypted_data": "luNskRsIEWk2zjPXNCUVo+7EhVS01uxaQb9WuqBRyqW0c+p7nVdYywb/uVfY\ngebG\n",
+    "iv": "ly+0ScaNkrAnkkzFLnKEsg==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "secret_token": {
+    "encrypted_data": "ESnsTvYJBU9lu7sexlSjoJGn7KFkLS4Vcibl11iPkfFciQcEUD8xX7cqQ7mW\ntlSN\n",
+    "iv": "me+fthb4yQ9t/3iZTTB9gQ==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  },
+  "secret_key_base": {
+    "encrypted_data": "FraDRJxwpte0JaHwIlbb73zm/4/8O0dUksHwm3FfOODcRPllkzUYfnBbpHsj\nH55r\n",
+    "iv": "ACh+ok/mXFDtFRkVrSiPkw==\n",
+    "version": 1,
+    "cipher": "aes-256-cbc"
+  }
 }

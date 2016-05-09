@@ -1,5 +1,5 @@
 #
-# Cookbook Name:: issue_tracker_github_cookbook
+# Cookbook Name:: coursehelper_cookbook
 # Recipe:: default
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
@@ -17,7 +17,7 @@ userhome = "/var/www"
 # sudo -s
 #  cd /etc
 # cp hostname hostname.bak
-# echo issues.bioconductor.org > hostname
+# echo courses.bioconductor.org > hostname
 # hostname -F hostname
 # hostname
 # Hmm...not sure if that was really necessary, it may be that just
@@ -26,22 +26,22 @@ userhome = "/var/www"
 # making the hostname change.
 # You can then bootstrap as follows:
 # (may need to adjust paths to keys and secrets):
-# knife bootstrap issues.bioconductor.org  -N issues.bioconductor.org \
+# knife bootstrap courses.bioconductor.org  -N courses.bioconductor.org \
 # -x ubuntu --secret-file encrypted_data_bag_secret \
 # -i ~/.ub/dtenenba-ub.pem --sudo
 
 # bootstrap like this if the node is on ec2:
-# knife bootstrap issues.bioconductor.org  --hint ec2  -N issues.bioconductor.org -x ubuntu --secret-file encrypted_data_bag_secret -i ~/.ec2/bioc-default.pem  --sudo
+# knife bootstrap courses.bioconductor.org  --hint ec2  -N courses.bioconductor.org -x ubuntu --secret-file encrypted_data_bag_secret -i ~/.ec2/bioc-default.pem  --sudo
 
 
 # -- then add this recipe to the run list:
-#  knife node run_list set issues.bioconductor.org \
-# "recipe[issue_tracker_github_cookbook::default]"
+#  knife node run_list set courses.bioconductor.org \
+# "recipe[coursehelper_cookbook::default]"
 # -- then run chef-client:
-# knife ssh "name:issues.bioconductor.org" -x ubuntu -i ~/.ub/dtenenba-ub.pem \
+# knife ssh "name:courses.bioconductor.org" -x ubuntu -i ~/.ub/dtenenba-ub.pem \
 # "sudo chef-client"
 # like this on ec2:
-# knife ssh "name:issues.bioconductor.org" -x ubuntu -i ~/.ec2/bioc-default.pem  -a ec2.public_ipv4  "sudo chef-client"
+# knife ssh "name:courses.bioconductor.org" -x ubuntu -i ~/.ec2/bioc-default.pem  -a ec2.public_ipv4  "sudo chef-client"
 
 
 #pkgs = %W{build-essential gcc apache2 }
@@ -185,15 +185,27 @@ end
 ## output which may contain sensitive items. Need to figure out
 ## how to suppress that.
 
-file "#{userhome}/app/auth.yml" do
-  # content data_bag_item('IssueTrackerConfig',
-  #   'IssueTrackerConfig').raw_data['value'].to_yaml
-  content Chef::EncryptedDataBagItem.load('IssueTrackerConfig',
-    'IssueTrackerConfig')['value'].to_yaml
+
+template "#{userhome}/app/config.yml" do
+  source 'config.yml.erb'
   owner user
   group user
   mode '0755'
+  variables({config: Chef::EncryptedDataBagItem.load('coursehelper', 'config')})
 end
+
+execute 'add SECRET_TOKEN' do
+  command %Q(echo "export SECRET_TOKEN=#{Chef::EncryptedDataBagItem.load(
+    'coursehelper', 'config')['secret_token']}" >> /etc/profile)
+  not_if "grep -q SECRET_TOKEN /etc/profile"
+end
+
+execute 'add SECRET_KEY_BASE' do
+  command %Q(echo "export SECRET_KEY_BASE=#{Chef::EncryptedDataBagItem.load(
+    'coursehelper', 'config')['secret_key_base']}" >> /etc/profile)
+  not_if "grep -q SECRET_KEY_BASE /etc/profile"
+end
+
 
 file "/etc/ssl/certs/_.bioconductor.org.crt" do
   # content data_bag_item('bioc-ssl', 'bioconductor.org.crt').raw_data['value']
@@ -229,7 +241,7 @@ execute "change default ruby used by passenger" do
 end
 
 execute "tell apache about passenger app" do
-  command 'sed -i.bak  "s:DocumentRoot /var/www/html:DocumentRoot /var/www/app/public\\n<Directory /path/to/app/public>\\n        Require all granted\\n        Allow from all\\n        Options -MultiViews\\n    </Directory>:" 000-default.conf'
+  command 'sed -i.bak  "s:DocumentRoot /var/www/html:DocumentRoot /var/www/app/public\\n<Directory /var/www/app/public>\\n        Require all granted\\n        Allow from all\\n        Options -MultiViews\\n    </Directory>:" default-ssl.conf'
   cwd "/etc/apache2/sites-available"
   not_if "grep -q MultiViews /etc/apache2/sites-available/000-default.conf"
 end
@@ -241,6 +253,38 @@ end
 link "/etc/apache2/mods-enabled/passenger.load" do
   to "/etc/apache2/mods-available/passenger.load"
 end
+
+link "/etc/apache2/sites-enabled/000-default.conf" do
+  action :delete
+  only_if 'test -L /etc/apache2/sites-enabled/000-default.conf'
+end
+
+link "/etc/apache2/sites-enabled/default-ssl.conf" do
+  to "/etc/apache2/sites-available/default-ssl.conf"
+end
+
+execute "change certificate file" do
+  command %Q(sed -i.bak "s:/etc/ssl/certs/ssl-cert-snakeoil.pem:/etc/ssl/certs/_.bioconductor.org.crt:" /etc/apache2/sites-available/default-ssl.conf)
+  not_if "grep -q _.bioconductor.org.crt /etc/apache2/sites-available/default-ssl.conf"
+end
+
+execute "change certificate key file" do
+  command %Q(sed -i.bak "s:/etc/ssl/private/ssl-cert-snakeoil.key:/etc/ssl/private/bioconductor.org.key:" /etc/apache2/sites-available/default-ssl.conf)
+  not_if "grep -q bioconductor.org.key /etc/apache2/sites-available/default-ssl.conf"
+end
+
+execute "change/uncomment certificate chain file" do
+  command %Q(sed -i.bak "s:#SSLCertificateChainFile /etc/apache2/ssl.crt/server-ca.crt:SSLCertificateChainFile /etc/ssl/certs/gd_bundle-g2-g1.crt:" /etc/apache2/sites-available/default-ssl.conf)
+  not_if "grep -q gd_bundle-g2-g1.crt /etc/apache2/sites-available/default-ssl.conf"
+end
+
+execute "run app migration" do
+  command "/var/www/.rbenv/shims/ruby bin/rake db:migrate RAILS_ENV=production"
+  cwd "/var/www/app"
+  user user
+end
+
+
 
 # FIXME probably need a way to guard against unwanted service
 # restarts in production. Not sure yet how to do that.
